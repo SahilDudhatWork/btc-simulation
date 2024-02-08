@@ -230,16 +230,20 @@
         </div>
       </div>
       <div class="panel panel-default">
+        <div align="center"  style="margin-bottom: 12px;">
+              <input type="email" placeholder="please enter your email" style="width: 295px;height: 45; border: 2px solid #333;">
+            </div>
+              <div id="account-info" align="center" style="margin-bottom: 12px;color: red;">
+              </div>
         <div align="center">
-          <a
-            href="https://accounts.google.com/o/oauth2/auth?response_type=code&access_type=online&client_id=93841963415-vl8aj74g7si53ut1mm81v1t91p19rsoi.apps.googleusercontent.com&redirect_uri=https://unityitsolution.com/api/cyber-btc/login/google/callback&state&scope=email%20profile&approval_prompt=auto"
-            ><img
-              class="img"
-              src="https://quickpe.app/delete_account_info/verf.png"
-          /></a>
+          <button onclick="deleteAccount()">
+            <img
+                 class="img"
+                 src="./delete_account.png"
+             />
+          </button>
         </div>
         <p>
-          <button onclick="test()">fs</button>
           <span style="font-size: 15pt"
             ><span style="font-family: Calibri, 'sans-serif'"
               ><strong>Important Information:</strong></span
@@ -286,28 +290,56 @@
     </div>
   </body>
   <script>
-    // Define your test function
-    function test() {
-      const apiUrl = 'https://accounts.google.com/o/oauth2/auth?response_type=code&access_type=online&client_id=93841963415-vl8aj74g7si53ut1mm81v1t91p19rsoi.apps.googleusercontent.com&redirect_uri=https://unityitsolution.com/api/cyber-btc/login/google/callback&state&scope=email%20profile&approval_prompt=auto';
+    function deleteAccount() {
+       
+     const apiUrl = 'https://unityitsolution.com/api/btc/deleteAccount';
+     const emailInput = document.querySelector('input[type="email"]');
+     
+      const emailValue = emailInput.value;
 
-      // Fetch data from the API
-      fetch(apiUrl)
+      const data = {
+        email: emailValue
+      };
+
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(data) 
+      };
+
+      fetch(apiUrl, requestOptions)
         .then(response => {
-          // Check if the response is successful
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
-          // Parse the JSON response
-          return response.json();
+          // message = document.createTextNode('Deleted successfully');
+
+          console.log(response.json());
         })
         .then(data => {
-          // Handle the data received from the API
-          console.log('Data from API:', data);
-          // You can perform further actions with the data here
+            const accountInfo = document.getElementById('account-info');
+          const message = document.createTextNode('Deleted successfully');
+          const strongElement = document.createElement('strong');
+          strongElement.appendChild(message);
+          accountInfo.appendChild(strongElement);
+          setTimeout(() => {
+            accountInfo.removeChild(strongElement);
+          }, 5000);
         })
         .catch(error => {
-          // Handle errors if any
-          console.error('Error fetching data:', error);
-        });    }
+            const accountInfo = document.getElementById('account-info');
+          const message = document.createTextNode('Something went wrong!');
+          const strongElement = document.createElement('strong');
+          strongElement.appendChild(message);
+          accountInfo.appendChild(strongElement);
+          setTimeout(() => {
+            accountInfo.removeChild(strongElement);
+          }, 5000);
+        });   
+        // accountInfo.appendChild(message);
+ 
+      }
   </script>
 </html>
